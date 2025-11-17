@@ -43,13 +43,15 @@ def pedagogika():
         cards = i.find_all('div', class_ = 'cards-unt-item')
         
         for i in cards:
-            title_elem = i.find('div', class_ = 'cards-unt-item__title')
-            if title_elem:
-                link_elem = title_elem.find('a')
-                if link_elem:
-                    title = link_elem.get_text()
-                    title = title.strip()
-                    link = link_elem.get('href')
+            tit = i.find('div', class_ = 'cards-unt-item__title')
+            if tit:
+                title = tit.get_text()
+                title = title.strip()
+
+            if tit:    
+                lin = tit.find('a')
+                if lin:
+                    link = lin.get('href')
 
                     if link[0] == '/':
                         link = 'https://pedsovet.org' + link
@@ -71,11 +73,10 @@ for i in r:
 for i in r:
     print(f"{i['id']}) {i['Название']}: {i['Ссылка']}")
 
-    
-result = pedagogika()
+result = pedagogika()  
 
 try:
     with open('articles.json', mode = 'w', encoding = 'utf-8') as file:
-        json.dump(result, file, ensure_ascii=False, indent= 2)
+        json.dump(result, file, ensure_ascii = False, indent = 2)
 except Exception as e:
         print(f"Ошибка при сохранении: {e}")
