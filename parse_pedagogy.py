@@ -19,14 +19,11 @@ def pedagogika():
 
     try:
         response = requests.get(url, headers = headers, timeout = 10)
-        
-        if response.status_code != 200:
-            print(f"Ошибка: {response.status_code}")
-            return [] 
+        #print(f"Код состояния операции: {response.status_code}")
             
     except requests.exceptions.RequestException as e:
         print(f"Ошибка при подключении: {e}")
-        return []
+        return ()
             
         
     soup = BeautifulSoup(response.content, 'html.parser')
@@ -35,20 +32,19 @@ def pedagogika():
     
     if not containers:
         print("Ошибка: контейнеры не найдены")
-        return []
+        return ()
        
     k = []
 
     for i in containers:
         cards = i.find_all('div', class_ = 'cards-unt-item')
         
-        for i in cards:
-            tit = i.find('div', class_ = 'cards-unt-item__title')
+        for ii in cards:
+            tit = ii.find('div', class_ = 'cards-unt-item__title')
             if tit:
                 title = tit.get_text()
                 title = title.strip()
-
-            if tit:    
+    
                 lin = tit.find('a')
                 if lin:
                     link = lin.get('href')
@@ -63,20 +59,18 @@ def pedagogika():
     
     return k
 
-r = pedagogika()
+result = pedagogika()
 
-id = 1
-for i in r:
-    i['id'] = id
-    id += 1
+if result:
 
-for i in r:
-    print(f"{i['id']}) {i['Название']}: {i['Ссылка']}")
+    s = 1
 
-result = pedagogika()  
-
-try:
-    with open('articles.json', mode = 'w', encoding = 'utf-8') as file:
-        json.dump(result, file, ensure_ascii = False, indent = 2)
-except Exception as e:
-        print(f"Ошибка при сохранении: {e}")
+    for i in result:
+        print(f"{s}) {i['Название']}")
+        print(f"Ссылка: {i['Ссылка']}")
+        s += 1
+    try:
+        with open('articles.json', mode = 'w', encoding = 'utf-8') as file:
+            json.dump(result, file, ensure_ascii = False, indent = 2)
+    except:
+            print(f"Ошибка при сохранении: {e}")
