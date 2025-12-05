@@ -72,5 +72,5 @@ if result:
     try:
         with open('articles.json', mode = 'w', encoding = 'utf-8') as file:
             json.dump(result, file, ensure_ascii = False, indent = 2)
-    except:
+    except Exception as e:
             print(f"Ошибка при сохранении: {e}")
